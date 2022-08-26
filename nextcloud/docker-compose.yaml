@@ -1,0 +1,45 @@
+version: '3'
+
+# volumes:
+#   nextcloud:
+#   db:
+
+services:
+  nextcloud_db:
+    image: mariadb
+    restart: always
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    networks:
+      - cloudnet
+    volumes:
+      - ./nextcloud-db:/var/lib/mysql
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=true
+      - MYSQL_PASSWORD=r0_otPasswOrd
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+
+  nextcloud:
+    image: nextcloud:24-apache
+    restart: always
+    networks:
+      - cloudnet
+    ports:
+     - 1382:80
+    volumes:
+      - ./nextcloud-docroot:/var/www/html
+    environment:
+      - NEXTCLOUD_DATA_DIR=/var/www/html/data
+      - MYSQL_PASSWORD=r0_otPasswOrd
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_HOST=nextcloud_db
+
+networks:
+  cloudnet:
+    name: cloudnet
+    driver: bridge
+
+
+# username: amirohammad / amirkmzh
+# password: EVjUfSu&yP$3ivyfGV3HJ8SBMf@Bb24#
