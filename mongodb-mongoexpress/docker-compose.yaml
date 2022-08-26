@@ -1,0 +1,28 @@
+version: "3.8"
+services: 
+  mongo:
+    image: "mongo"
+    container_name: mongo
+    restart: always
+    ports:
+    - "1376:27017"
+    volumes: 
+      - "./database/db:/data/db"
+      - "./database/dev.archive:/Databases/dev.archive"
+      - "./database/production:/Databases/production"
+  mongo-express:
+    image: "mongo-express"
+    container_name: mongo_express
+    restart: "always"
+    ports:
+      - "1377:8081"
+    environment:
+      - ME_CONFIG_BASICAUTH_USERNAME=admin
+      - ME_CONFIG_BASICAUTH_PASSWORD=M0ng0adm1n
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+      - ME_CONFIG_OPTIONS_EDITORTHEME=dracula
+      - ME_CONFIG_REQUEST_SIZE=256kb
+      - ME_CONFIG_MONGODB_PORT="1376"
+    links:
+      - mongo
+
