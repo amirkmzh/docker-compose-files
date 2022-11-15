@@ -1,0 +1,25 @@
+version: '3'
+services:
+  ftpd_server:
+    image: stilliard/pure-ftpd
+    container_name: pure-ftpd
+    ports:
+      - "21:21"
+      - "30000-30009:30000-30009"
+    volumes:
+      # If you want to store files and user-password, configure with yours.
+      - "./files/data:/home/amirmohammad/"
+      - "./data/passwords:/etc/pure-ftpd/passwd"
+    environment:
+      # Replace your public hostnname
+      PUBLICHOST: "localhost"
+      # Replace your ftp username
+      FTP_USER_NAME: amirmohammad
+      # Replace your desired password without any encryption
+      FTP_USER_PASS: fNyXn#g!9dWarRu6AC@Zgq!$
+      # Replace with yours
+      FTP_USER_HOME: /home/amirmohammad
+      # Limit number of clients
+      FTP_MAX_CLIENTS: 3
+
+    restart: unless-stopped
